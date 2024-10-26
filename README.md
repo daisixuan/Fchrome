@@ -13,7 +13,7 @@
         elements大小随机
         ```
         - ### 效果
-            ![screenshot](screenshot.png)
+            ![screenshot](imgs/screenshot.png)
             - 测试网站 
                 - https://gongjux.com/fingerprint/
         - ### 源码
@@ -50,11 +50,11 @@
             - 然后在网页上正常操作即可在控制台得到打印的对象信息，进行环境监控，辅助JS补环境
         - ### 使用方法以及效果
             - 先设置断点 然后刷新网页 即可在JS最先执行的时机停下(需要注意安装油猴后，会对此方法产生影响导致proxy.js脚本不生效)
-            ![screenshot](screenshot1.jpg)
+            ![screenshot](imgs/screenshot1.jpg)
             - 执行proxy.js后取消断点 然后执行网页js
-            ![screenshot](screenshot2.jpg)
+            ![screenshot](imgs/screenshot2.jpg)
             - 成功监控对象
-            ![screenshot](screenshot3.jpg)
+            ![screenshot](imgs/screenshot3.jpg)
         - ### 编译成品
             - [目前只有Win版本](https://github.com/daisixuan/r0chrome/releases)
                 - 便携式
@@ -79,3 +79,6 @@
     - #### 加v：r0ysue 进浏览器指纹随机定制群
     - #### 作者v: lenganlan
 
+- # 感谢支持!!
+
+![screenshot](imgs/wx_pay.jpg)
