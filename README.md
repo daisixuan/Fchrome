@@ -73,7 +73,7 @@
 
 - # 后续更新方向
   - todo
-    - 新增替换iframe的contentDocument和contentWindow
+    - 新增替换iframe的contentDocument和contentWindow(目前可以直接替换HTMLIFrameElement.prototype的get方法 参考iframe_demo.js 缺点是直接返回的是全局的window 可能会被检测 比如没被添加到document.body中的时候 其实是null 或者多了一些全局环境在iframe的contentWindow中会被检测)
     - 自定义console.log 并去掉原始的console.log 防止控制台/cdp检测 和 console.log被抹去或被console.clear清掉日志（目前通过js hook方式去实现）
     - 更新其他全局对象监控
 
