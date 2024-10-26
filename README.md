@@ -43,6 +43,7 @@
         ```
         - ### 原理简介
             - 对chromium源码中全局对象定义进行修改/添加，使得全局对象变得可以覆盖，从而使用JS的代理器对全局对象进行监控
+            - 对debugger关键字替换为debuggee 无视无限debugger
         - ### 源码
             - diff文件在monitor_change_code文件夹下
         - ### 使用方法
@@ -72,7 +73,8 @@
 
 - # 后续更新方向
   - todo
-    - 加入自定义的debugger 去掉原始debugger 绕过反调试
+    - 新增替换iframe的contentDocument和contentWindow
+    - 自定义console.log 并去掉原始的console.log 防止控制台/cdp检测 和 console.log被抹去或被console.clear清掉日志（目前通过js hook方式去实现）
     - 更新其他全局对象监控
 
 - # 联系我们
