@@ -100,12 +100,21 @@ dtavm.proxy = function (obj, objname, type){
     return new Proxy(obj, getObjhandler(objname));
 }
 
+
 Object.defineProperties(globalThis, {
     'window': {
         configurable: false,
         enumerable: true,
         get: function get() {
-            return dtavm.proxy(window_dta, "window")
+            return dtavm.proxy(window_jyl, "window")
+        },
+        set: undefined
+    },
+    'document': {
+        configurable: false,
+        enumerable: true,
+        get: function get() {
+            return dtavm.proxy(document_jyl, "document")
         },
         set: undefined
     },
@@ -113,25 +122,34 @@ Object.defineProperties(globalThis, {
         configurable: true,
         enumerable: true,
         get: function get() {
-            return dtavm.proxy(navigator_dta, "navigator")
+            return dtavm.proxy(navigator_jyl, "navigator")
         },
         set: undefined
     },
-	'document': {
-        configurable: false,
-        enumerable: true,
-        get: function get() {
-            return dtavm.proxy(document_dta, "document")
-        },
-        set: undefined
-    },
-	'history': {
+    'history': {
         configurable: true,
         enumerable: true,
         get: function get() {
-            return dtavm.proxy(history_dta, "history")
+            return dtavm.proxy(history_jyl, "history")
+        },
+        set: undefined
+    },
+    'sessionStorage': {
+        configurable: true,
+        enumerable: true,
+        get: function get() {
+            return dtavm.proxy(sessionStorage_jyl, "sessionStorage")
+        },
+        set: undefined
+    },
+    'localStorage': {
+        configurable: true,
+        enumerable: true,
+        get: function get() {
+            return dtavm.proxy(localStorage_jyl, "localStorage")
         },
         set: undefined
     },
 })
-screen = dtavm.proxy(screen_dta, "screen")
+
+screen = dtavm.proxy(screen_jyl, "screen")
