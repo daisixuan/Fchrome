@@ -56,6 +56,10 @@
             ![screenshot](imgs/screenshot2.jpg)
             - 成功监控对象
             ![screenshot](imgs/screenshot3.jpg)
+        - ### 关于iframe中的对象代理
+          - 参考iframe_proxy.js的代码即可完美监控iframe中的contentWindow和contentDocument（注入时机和proxy.js相同 先执行proxy.js）
+          - ![screenshot](imgs/iframe1.png)
+          - ![screenshot](imgs/iframe2.png)
         - ### 编译成品
             - [目前只有Win版本](https://github.com/daisixuan/r0chrome/releases)
                 - 便携式
@@ -73,7 +77,8 @@
 
 - # 后续更新方向
   - todo
-    - 新增替换iframe的contentDocument和contentWindow(目前可以直接替换HTMLIFrameElement.prototype的get方法 参考iframe_demo.js 缺点是直接返回的是全局的window 可能会被检测 比如没被添加到document.body中的时候 其实是null 或者多了一些全局环境在iframe的contentWindow中会被检测)
+    - js hook的代码制作成chrome插件一键启动！
+    - 直接内置v_jstools的监控避免冲突(可能抹去的console的方法会导致v_jstools无法打印)
     - 自定义console.log 并去掉原始的console.log 防止控制台/cdp检测 和 console.log被抹去或被console.clear清掉日志（目前通过js hook方式去实现）
     - 更新其他全局对象监控
 
