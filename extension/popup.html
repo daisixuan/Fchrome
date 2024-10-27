@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <style type="text/css">
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+      transform: scale(.5, .5);
+    }
+    .switch input {display:none;}
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .05s;
+      transition: .05s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .05s;
+      transition: .05s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+  </style>
+  <style>
+    .button {
+      display: inline-block;
+      border-radius: 4px;
+      background-color: #0000FF;
+      border: none;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 15px;
+      padding: 10px;
+      width: 160px;
+      transition: all 0.5s;
+      cursor: pointer;
+      margin: 5px;
+    }
+    .button span {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: 0.5s;
+    }
+    .button span:after {
+      content: '»';
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      right: -20px;
+      transition: 0.5s;
+    }
+    .button:hover span {
+      padding-right: 25px;
+    }
+    .button:hover span:after {
+      opacity: 1;
+      right: 0;
+    }
+
+    .button2 {
+      display: inline-block;
+      padding: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      text-align: center;   
+      text-decoration: none;
+      outline: none;
+      width: 160px;
+      transition: all 0.5s;
+      margin: 5px;
+      color: #fff;
+      background-color: #0000FF;
+      border: none;
+      border-radius: 4px;
+      box-shadow: 0 3px #999;
+    }
+
+    .button2:hover {background-color: #b62f04}
+
+    .button2:active {
+      background-color: #3e8e41;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
+    }
+    </style>
+
+</head>
+<body style="width: 200px;">
+  <label class="switch">
+    <input type="checkbox" data-key="config-proxy-hook"><div class="slider"></div>
+  </label>
+  <div style="float: right; padding: 10px">是否开启proxy代理</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

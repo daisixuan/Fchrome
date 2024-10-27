@@ -1,0 +1,33 @@
+{
+  "name": "proxy_tools",
+  "version": "1.0.0",
+  "description": "proxy hook注入",
+  "permissions": ["unlimitedStorage", 
+                  "activeTab", 
+                  "webRequest",
+                  "webRequestBlocking",
+                  "tabs", 
+                  "debugger", 
+                  "storage", 
+                  "contextMenus", 
+                  "http://*/*", 
+                  "https://*/*", 
+                  "<all_urls>",
+                  "cookies", 
+                  "downloads",
+                  "proxy"
+                ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [ "file:///*", "http://*/*", "https://*/*" ],
+      "run_at": "document_start",
+      "js": ["./tools/proxy.js","inject.js"],
+      "all_frames": true
+    }
+  ],
+  "manifest_version": 2
+}
