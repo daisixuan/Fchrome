@@ -1,134 +1,142 @@
 
 dtavm = {}
-dtavm.proxy_start = function proxy_start(){
+dtavm.proxy_start = function proxy_start() {
     dtavm = {}
     rawlog = console.log
     dtavm.log = rawlog
     delete rawlog
-    // 保护伪造函数toString
-    ;(() => {
-        const $toString = Function.toString
-        const myFunction_toString_symbol = Symbol('('.concat('', ')_', (Math.random()) + '').toString(36))
-        const myToString = function (){
-            return typeof this === 'function' && this[myFunction_toString_symbol] || $toString.call(this)
-        }
-        function set_native(func, key, value){
-            Object.defineProperty(func, key, {
-                enumerable: false,
-                configurable: true,
-                writable: true,
-                value: value
-            })
-        }
-        delete Function.prototype.toString
-        set_native(Function.prototype, "toString", myToString)
-        set_native(Function.prototype.toString, myFunction_toString_symbol, "function toString() { [native code] }")
-        globalThis.dtavm.func_set_native = (func, name) => {
-            //todo 系统函数没名字 native code
-            set_native(func, myFunction_toString_symbol, `function ${func.name || name || ''}() { [native code] }`)
-        }
-    }).call(this);
-    for (let key in Object.getOwnPropertyDescriptors(console) ) {
-        if (typeof console[key] == "function"){
-            console[key] = function(){}
+        // 保护伪造函数toString
+        ; (() => {
+            const $toString = Function.toString
+            const myFunction_toString_symbol = Symbol('('.concat('', ')_', (Math.random()) + '').toString(36))
+            const myToString = function () {
+                return typeof this === 'function' && this[myFunction_toString_symbol] || $toString.call(this)
+            }
+            function set_native(func, key, value) {
+                Object.defineProperty(func, key, {
+                    enumerable: false,
+                    configurable: true,
+                    writable: true,
+                    value: value
+                })
+            }
+            delete Function.prototype.toString
+            set_native(Function.prototype, "toString", myToString)
+            set_native(Function.prototype.toString, myFunction_toString_symbol, "function toString() { [native code] }")
+            globalThis.dtavm.func_set_native = (func, name) => {
+                //todo 系统函数没名字 native code
+                set_native(func, myFunction_toString_symbol, `function ${func.name || name || ''}() { [native code] }`)
+            }
+        }).call(this);
+    for (let key in Object.getOwnPropertyDescriptors(console)) {
+        if (typeof console[key] == "function") {
+            console[key] = function () { }
             dtavm.func_set_native(console[key], key)
         }
     }
-    dtavm.proxy = function (obj, objname, type){
+    dtavm.proxy = function (obj, objname, type) {
         function getMethodHandler(WatchName, target_obj) {
-        let methodhandler = {
-            apply(target, thisArg, argArray) {
-                if (this.target_obj){
-                    thisArg = this.target_obj
-                }
-                let result = Reflect.apply(target, thisArg, argArray)
-                if (target.name !== "toString"){
-                    if (target.name === "addEventListener"){
-                        dtavm.log(`[${WatchName}] apply function name is [${target.name}], argArray is [${argArray[0]}], result is [${result}].`)
-                    }else if (WatchName === "window.console"){
-                    }else {
-                        dtavm.log(`[${WatchName}] apply function name is [${target.name}], argArray is [${argArray}], result is [${result}].`)
+            let methodhandler = {
+                apply(target, thisArg, argArray) {
+                    if (this.target_obj){
+                        thisArg = this.target_obj
                     }
-                }else{
-                    dtavm.log(`[${WatchName}] apply function name is [${target.name}], argArray is [${argArray}], result is [${result}].`)
+                    let result = Reflect.apply(target, thisArg, argArray)
+                    if (target.name !== "toString"){
+                        if (WatchName === "window.console"){
+                        }else if(result instanceof Promise){
+                            result.then((data)=>{
+                                dtavm.log(`[${WatchName}] apply function name is [${target.name}], argArray is `, argArray,`result is `, data);
+                            })
+                        }else {
+                            dtavm.log(`[${WatchName}] apply function name is [${target.name}], argArray is `, argArray, `result is `, result);
+                        }
+                    }else{
+                        dtavm.log(`[${WatchName}] apply function name is [${target.name}], argArray is `, argArray, `result is `, result);
+                    }
+                    return result
+                },
+                construct(target, argArray, newTarget) {
+                    var result = Reflect.construct(target, argArray, newTarget)
+                    dtavm.log(`[${WatchName}] construct function name is [${target.name}], argArray is `, argArray, `result is `, result);
+                    return result;
                 }
-                return result
-            },
-            construct(target, argArray, newTarget) {
-                var result = Reflect.construct(target, argArray, newTarget)
-                dtavm.log(`[${WatchName}] construct function name is [${target.name}], argArray is [${argArray}], result is [${(result)}].`)
-                return result;
             }
+            methodhandler.target_obj = target_obj
+            return methodhandler
         }
-        methodhandler.target_obj = target_obj
-        return methodhandler
-    }
 
         function getObjhandler(WatchName) {
-        let handler = {
-            get(target, propKey, receiver) {
-                let result = target[propKey]
-                if (result instanceof Object) {
-                    if (typeof result === "function") {
-                        dtavm.log(`[${WatchName}] getting propKey is [${propKey}] , it is function`)
-                        return new Proxy(result,getMethodHandler(WatchName, target))
+            let handler = {
+                get(target, propKey, receiver) {
+                    let result = target[propKey]
+                    if (result instanceof Object) {
+                        if (typeof result === "function") {
+                            dtavm.log(`[${WatchName}] getting propKey is [`,propKey,`] , it is function`)
+                            return new Proxy(result, getMethodHandler(WatchName, target))
+                        }
+                        else {
+                            dtavm.log(`[${WatchName}] getting propKey is [`,propKey,`], result is [`,result,`]`);
+                        }
+                        return new Proxy(result, getObjhandler(`${WatchName}.${propKey}`))
                     }
-                    else {
-                        dtavm.log(`[${WatchName}] getting propKey is [${propKey}], result is [${(result)}]`);
+                    if (typeof (propKey) !== "symbol") {
+                        dtavm.log(`[${WatchName}] getting propKey is [`,propKey,`], result is [`,result,`]`);
                     }
-                    return new Proxy(result, getObjhandler(`${WatchName}.${propKey}`))
-                }
-                if(typeof(propKey) !== "symbol"){
-                    dtavm.log(`[${WatchName}] getting propKey is [${propKey?.description ?? propKey}], result is [${result}]`);
-                }
-                return result;
-            },
-            set(target, propKey, value, receiver) {
-                if (value instanceof Object) {
-                    dtavm.log(`[${WatchName}] setting propKey is [${propKey}], value is [${(value)}]`);
-                } else {
-                    dtavm.log(`[${WatchName}] setting propKey is [${propKey}], value is [${value}]`);
-                }
-                return Reflect.set(target, propKey, value, receiver);
-            },
-            has(target, propKey) {
-                var result = Reflect.has(target, propKey);
-                dtavm.log(`[${WatchName}] has propKey [${propKey}], result is [${result}]`)
-                return result;
-            },
-            deleteProperty(target, propKey) {
-                var result = Reflect.deleteProperty(target, propKey);
-                dtavm.log(`[${WatchName}] delete propKey [${propKey}], result is [${result}]`)
-                return result;
-            },
-            defineProperty(target, propKey, attributes) {
-                var result = Reflect.defineProperty(target, propKey, attributes);
-                dtavm.log(`[${WatchName}] defineProperty propKey [${propKey}] attributes is [${(attributes)}], result is [${result}]`)
-                return result
-            },
-            getPrototypeOf(target) {
-                var result = Reflect.getPrototypeOf(target)
-                dtavm.log(`[${WatchName}] getPrototypeOf result is [${(result)}]`)
-                return result;
-            },
-            setPrototypeOf(target, proto) {
-                dtavm.log(`[${WatchName}] setPrototypeOf proto is [${(proto)}]`)
-                return Reflect.setPrototypeOf(target, proto);
-            },
-            preventExtensions(target) {
-                dtavm.log(`[${WatchName}] preventExtensions`)
-                return Reflect.preventExtensions(target);
-            },
-            isExtensible(target) {
-                var result = Reflect.isExtensible(target)
-                dtavm.log(`[${WatchName}] isExtensible, result is [${result}]`)
-                return result;
-            },
+                    return result;
+                },
+                set(target, propKey, value, receiver) {
+                    if (value instanceof Object) {
+                        dtavm.log(`[${WatchName}] setting propKey is [`,propKey,`], value is [`,value,`]`);
+                    } else {
+                        dtavm.log(`[${WatchName}] setting propKey is [`,propKey,`], value is [`,value,`]`);
+                    }
+                    try{
+                        var result =  Reflect.set(target, propKey, value, receiver);
+                        return result;
+                    }catch(e){
+                        target[propKey] = value;
+                        return value;
+                    }
+                },
+                has(target, propKey) {
+                    var result = Reflect.has(target, propKey);
+                    dtavm.log(`[${WatchName}] has propKey [`,propKey,`], result is [`,result,`]`)
+                    return result;
+                },
+                deleteProperty(target, propKey) {
+                    var result = Reflect.deleteProperty(target, propKey);
+                    dtavm.log(`[${WatchName}] delete propKey [`,propKey,`], result is [`,result,`]`)
+                    return result;
+                },
+                defineProperty(target, propKey, attributes) {
+                    var result = Reflect.defineProperty(target, propKey, attributes);
+                    dtavm.log(`[${WatchName}] defineProperty propKey [`,propKey,`] attributes is [`,attributes,`], result is [`,result,`]`)
+                    return result
+                },
+                getPrototypeOf(target) {
+                    var result = Reflect.getPrototypeOf(target)
+                    dtavm.log(`[${WatchName}] getPrototypeOf result is [`,result,`]`)
+                    return result;
+                },
+                setPrototypeOf(target, proto) {
+                    dtavm.log(`[${WatchName}] setPrototypeOf proto is [`,proto,`]`)
+                    return Reflect.setPrototypeOf(target, proto);
+                },
+                // preventExtensions(target) {
+                //     dtavm.log(`[${WatchName}] preventExtensions`)
+                //     return Reflect.preventExtensions(target);
+                // },
+                // isExtensible(target) {
+                //     var result = Reflect.isExtensible(target)
+                //     dtavm.log(`[${WatchName}] isExtensible, result is [`,result,`]`)
+                //     return result;
+                // },
+            }
+            return handler;
         }
-        return handler;
-    }
 
-        if (type === "method"){
+        if (type === "method") {
             return new Proxy(obj, getMethodHandler(objname, obj));
         }
         return new Proxy(obj, getObjhandler(objname));
@@ -187,4 +195,49 @@ dtavm.proxy_start = function proxy_start(){
     })
 
     screen = dtavm.proxy(screen_jyl, "screen")
+}
+dtavm.iframe_proxy_start = function iframe_proxy_start() {
+    function defineProperty(obj, key, value, configurable, enumerable, writable, getter, setter) {
+        let attr = {
+            configurable: configurable,
+            enumerable: enumerable
+        }
+        if (value !== undefined) {
+            attr["value"] = value
+        }
+        if (writable !== undefined) {
+            attr["writable"] = writable
+        }
+        if (getter) {
+            attr["get"] = getter
+        }
+        if (setter) {
+            attr["set"] = setter
+        }
+
+        Object.defineProperty(obj, key, attr)
+    }
+    dtavm.raw_contentWindow_get = Object.getOwnPropertyDescriptors(HTMLIFrameElement.prototype)["contentWindow"].get
+    dtavm.raw_contentDocument_get = Object.getOwnPropertyDescriptors(HTMLIFrameElement.prototype)["contentDocument"].get
+
+
+    defineProperty(HTMLIFrameElement.prototype, "contentWindow", undefined, true, true, undefined, function(){
+        var result = dtavm.raw_contentWindow_get.call(this);
+        dtavm.log(`[HTMLIFrameElement.prototype] getting propKey is [contentWindow], value is`, result);
+        if (result){
+            return dtavm.proxy(result, "contentWindow");
+        }else{
+            return result;
+        }
+    }, undefined)
+    defineProperty(HTMLIFrameElement.prototype, "contentDocument", undefined, true, true, undefined, function(){
+        var result = dtavm.raw_contentDocument_get.call(this);
+        dtavm.log(`[HTMLIFrameElement.prototype] getting propKey is [contentDocument], value is`, result);
+        if (result){
+            return dtavm.proxy(result, "contentDocument");    
+        }else{
+            return result;
+        }
+        
+    }, undefined)
 }

@@ -46,20 +46,36 @@
             - 对debugger关键字替换为debuggee 无视无限debugger
         - ### 源码
             - diff文件在monitor_change_code文件夹下
-        - ### 使用方法
-            - 在浏览器控制台中执行proxy.js的代码(推荐在JS最先执行的时机断点（事件侦听器断点->脚本->脚本的第一条语句）然后运行js代码，最先取得全局对象的控制权)
-            - 然后在网页上正常操作即可在控制台得到打印的对象信息，进行环境监控，辅助JS补环境
-        - ### 使用方法以及效果
-            - 先设置断点 然后刷新网页 即可在JS最先执行的时机停下(需要注意安装油猴后，会对此方法产生影响导致proxy.js脚本不生效)
+        - ### 使用方法1(方法2为一键启动)
+          - 在浏览器控制台中执行proxy.js的代码(推荐在JS最先执行的时机断点（事件侦听器断点->脚本->脚本的第一条语句）然后运行js代码，最先取得全局对象的控制权)
+          - 然后在网页上正常操作即可在控制台得到打印的对象信息，进行环境监控，辅助JS补环境
+        - #### 图片教学
+          - 先设置断点 然后刷新网页 即可在JS最先执行的时机停下(需要注意安装油猴后，会对此方法产生影响导致proxy.js脚本不生效)
             ![screenshot](imgs/screenshot1.jpg)
-            - 执行proxy.js后取消断点 然后执行网页js
+          - 执行proxy.js后取消断点 然后执行网页js
             ![screenshot](imgs/screenshot2.jpg)
-            - 成功监控对象
+          - 成功监控对象
             ![screenshot](imgs/screenshot3.jpg)
+        - ### 使用方法2
+          - 导入插件到chrome
+          ![screenshot](imgs/extension1.png)
+          ![screenshot](imgs/extension2.png)
+          - 下载r0chrome项目 导入extension文件夹
+          ![screenshot](imgs/extension3.png)
+          - 导入插件成功
+          ![screenshot](imgs/extension4.png)
+          - 启动插件
+          ![screenshot](imgs/extension5.png) 
+          - 监控成功
+          ![screenshot](imgs/extension6.png) 
         - ### 关于iframe中的对象代理
           - 参考iframe_proxy.js的代码即可完美监控iframe中的contentWindow和contentDocument（注入时机和proxy.js相同 先执行proxy.js）
-          - ![screenshot](imgs/iframe1.png)
-          - ![screenshot](imgs/iframe2.png)
+          ![screenshot](imgs/iframe1.png)
+          ![screenshot](imgs/iframe2.png)
+        - #### 插件启动iframe代理
+          - 可能和v_jstools一起hook有冲突
+          ![screenshot](imgs/iframe_extension1.png)
+          ![screenshot](imgs/iframe_extension2.png)
         - ### 编译成品
             - [目前只有Win版本](https://github.com/daisixuan/r0chrome/releases)
                 - 便携式
@@ -78,7 +94,7 @@
 - # 后续更新方向
   - todo
     - js hook的代码制作成chrome插件一键启动！
-    - 直接内置v_jstools的监控避免冲突(可能抹去的console的方法会导致v_jstools无法打印)
+    - 直接内置v_jstools的监控避免冲突
     - 自定义console.log 并去掉原始的console.log 防止控制台/cdp检测 和 console.log被抹去或被console.clear清掉日志（目前通过js hook方式去实现）
     - 更新其他全局对象监控
 

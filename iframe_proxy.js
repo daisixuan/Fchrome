@@ -25,7 +25,7 @@ dtavm.raw_contentDocument_get = Object.getOwnPropertyDescriptors(HTMLIFrameEleme
 
 defineProperty(HTMLIFrameElement.prototype, "contentWindow", undefined, true, true, undefined, function(){
     var result = dtavm.raw_contentWindow_get.call(this);
-    dtavm.log(`[HTMLIFrameElement.prototype] getting propKey is [contentWindow], value is [${(result)}]`);
+    dtavm.log(`[HTMLIFrameElement.prototype] getting propKey is [contentWindow], value is`, result);
     if (result){
         return dtavm.proxy(result, "contentWindow");
     }else{
@@ -34,7 +34,7 @@ defineProperty(HTMLIFrameElement.prototype, "contentWindow", undefined, true, tr
 }, undefined)
 defineProperty(HTMLIFrameElement.prototype, "contentDocument", undefined, true, true, undefined, function(){
     var result = dtavm.raw_contentDocument_get.call(this);
-    dtavm.log(`[HTMLIFrameElement.prototype] getting propKey is [contentDocument], value is [${(result)}]`);
+    dtavm.log(`[HTMLIFrameElement.prototype] getting propKey is [contentDocument], value is`, result);
     if (result){
         return dtavm.proxy(result, "contentDocument");    
     }else{
