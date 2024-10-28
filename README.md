@@ -93,7 +93,7 @@
 
 - # 后续更新方向
   - todo
-    - js hook的代码制作成chrome插件一键启动！
+    - ~~js hook的代码制作成chrome插件一键启动！~~
     - 直接内置v_jstools的监控避免冲突
     - 自定义console.log 并去掉原始的console.log 防止控制台/cdp检测 和 console.log被抹去或被console.clear清掉日志（目前通过js hook方式去实现）
     - 更新其他全局对象监控
