@@ -189,6 +189,15 @@ Object.defineProperties(globalThis, {
         },
         set: undefined
     },
+    'location': {
+        configurable: false,
+        enumerable: true,
+        get: function get() {
+            return dtavm.proxy(location_jyl, "location")
+        },
+        set: undefined
+    },
 })
 
 screen = dtavm.proxy(screen_jyl, "screen")
+performance = dtavm.proxy(performance_jyl, "performance")

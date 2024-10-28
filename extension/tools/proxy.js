@@ -192,9 +192,18 @@ dtavm.proxy_start = function proxy_start() {
             },
             set: undefined
         },
+        'location': {
+            configurable: false,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(location_jyl, "location")
+            },
+            set: undefined
+        },
     })
 
     screen = dtavm.proxy(screen_jyl, "screen")
+    performance = dtavm.proxy(performance_jyl, "performance")
 }
 dtavm.iframe_proxy_start = function iframe_proxy_start() {
     function defineProperty(obj, key, value, configurable, enumerable, writable, getter, setter) {

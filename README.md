@@ -36,10 +36,12 @@
         window 对象监控
         navigator 对象监控
         document 对象监控
+        location 对象监控
         history 对象监控
         screen 对象监控
         localStorage 对象监控
         sessionStorage 对象监控
+        performance 对象监控
         ```
         - ### 原理简介
             - 对chromium源码中全局对象定义进行修改/添加，使得全局对象变得可以覆盖，从而使用JS的代理器对全局对象进行监控
@@ -58,24 +60,24 @@
             ![screenshot](imgs/screenshot3.jpg)
         - ### 使用方法2
           - 导入插件到chrome
-          ![screenshot](imgs/extension1.png)
-          ![screenshot](imgs/extension2.png)
+            - ![screenshot](imgs/extension1.png)
+            - ![screenshot](imgs/extension2.png)
           - 下载r0chrome项目 导入extension文件夹
-          ![screenshot](imgs/extension3.png)
+            - ![screenshot](imgs/extension3.png)
           - 导入插件成功
-          ![screenshot](imgs/extension4.png)
+            - ![screenshot](imgs/extension4.png)
           - 启动插件
-          ![screenshot](imgs/extension5.png) 
+            - ![screenshot](imgs/extension5.png) 
           - 监控成功
-          ![screenshot](imgs/extension6.png) 
+            - ![screenshot](imgs/extension6.png) 
         - ### 关于iframe中的对象代理
           - 参考iframe_proxy.js的代码即可完美监控iframe中的contentWindow和contentDocument（注入时机和proxy.js相同 先执行proxy.js）
-          ![screenshot](imgs/iframe1.png)
-          ![screenshot](imgs/iframe2.png)
+            - ![screenshot](imgs/iframe1.png)
+            - ![screenshot](imgs/iframe2.png)
         - #### 插件启动iframe代理
           - 可能和v_jstools一起hook有冲突
-          ![screenshot](imgs/iframe_extension1.png)
-          ![screenshot](imgs/iframe_extension2.png)
+            - ![screenshot](imgs/iframe_extension1.png)
+            - ![screenshot](imgs/iframe_extension2.png)
         - ### 编译成品
             - [目前只有Win版本](https://github.com/daisixuan/r0chrome/releases)
                 - 便携式
