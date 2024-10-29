@@ -167,14 +167,6 @@ dtavm.proxy_start = function proxy_start() {
             },
             set: undefined
         },
-        'this': {
-            configurable: false,
-            enumerable: true,
-            get: function get() {
-                return dtavm.proxy(window_jyl, "this")
-            },
-            set: undefined
-        },
         'document': {
             configurable: false,
             enumerable: true,
@@ -274,14 +266,14 @@ dtavm.iframe_proxy_start = function iframe_proxy_start() {
     }, undefined)
 }
 dtavm.function_proxy = function function_proxy(){
-    let filter_func_list = ["Function", "eval", "Object", "Array", "Number", "parseFloat", "parseInt", "Boolean", "String", "Symbol", "Date", "Promise", "RegExp", "Error", "AggregateError", "EvalError", "RangeError", "ReferenceError", "SyntaxError", "TypeError", "URIError", "ArrayBuffer", "Uint8Array", "Int8Array", "Uint16Array", "Int16Array", "Uint32Array", "Int32Array", "Float32Array", "Float64Array", "Uint8ClampedArray", "BigUint64Array", "BigInt64Array", "DataView", "Map", "BigInt", "Set", "WeakMap", "WeakSet", "Proxy", "FinalizationRegistry", "WeakRef", "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent", "escape", "unescape", "isFinite", "isNaN", "SharedArrayBuffer", "VMError", "Buffer"];
+    let filter_func_list = ["function_proxy", "iframe_proxy_start", "proxy_start", "Function", "eval", "Object", "Array", "Number", "parseFloat", "parseInt", "Boolean", "String", "Symbol", "Date", "Promise", "RegExp", "Error", "AggregateError", "EvalError", "RangeError", "ReferenceError", "SyntaxError", "TypeError", "URIError", "ArrayBuffer", "Uint8Array", "Int8Array", "Uint16Array", "Int16Array", "Uint32Array", "Int32Array", "Float32Array", "Float64Array", "Uint8ClampedArray", "BigUint64Array", "BigInt64Array", "DataView", "Map", "BigInt", "Set", "WeakMap", "WeakSet", "Proxy", "FinalizationRegistry", "WeakRef", "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent", "escape", "unescape", "isFinite", "isNaN", "SharedArrayBuffer", "VMError", "Buffer"];
     const globalFunctions = Reflect.ownKeys(globalThis).filter((key) => {
         var result = globalThis[key];
         if (typeof result === 'function' && !filter_func_list.includes(key)) {
-            // eval(`key = globalThis.${key}`);
             eval(`${key}=window.${key}`)
-            return result;
+            return key;
         }
     });
+    dtavm.log("hook 全局函数列表", globalFunctions)
         
 }

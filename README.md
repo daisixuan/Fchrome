@@ -78,6 +78,11 @@
           - 可能和v_jstools一起hook有冲突
             - ![screenshot](imgs/iframe_extension1.png)
             - ![screenshot](imgs/iframe_extension2.png)
+        - #### 插件启动全局函数代理（实验中）
+          - ![screenshot](imgs/function1.png)
+          - ![screenshot](imgs/function2.png)
+          - 效果展示
+            - ![screenshot](imgs/function3.png)
         - ### 编译成品
             - [目前只有Win版本](https://github.com/daisixuan/r0chrome/releases)
                 - 便携式
