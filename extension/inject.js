@@ -11,11 +11,15 @@ function inject_script(code){
     html.removeChild( script );
   }
 
-var hookers = ["config-proxy-hook", "config-iframe-proxy-hook"]
+var hookers = ["config-proxy-hook", "config-iframe-proxy-hook", "config-function-proxy-hook"]
 chrome.storage.local.get(hookers, function (result) {
     if (result["config-proxy-hook"]){
         console.log("启动代理器替换全局对象!")
         inject_script(dtavm.proxy_start.toString() + "\nproxy_start()")
+        if (result["config-function-proxy-hook"]){
+          console.log("启动function代理器!")
+          inject_script(dtavm.function_proxy.toString() + "\nfunction_proxy()")
+        }
         if (result["config-iframe-proxy-hook"]){
           console.log("启动iframe代理器!")
           inject_script(dtavm.iframe_proxy_start.toString() + "\iframe_proxy_start()")

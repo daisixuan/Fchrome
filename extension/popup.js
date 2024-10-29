@@ -5,7 +5,13 @@ function sub_logger(){
     chrome.browserAction.setBadgeBackgroundColor({color: '#BC1717'});
     var info = ''
     if (e['config-proxy-hook']){
-      info += 'Proxy'
+      info += 'P'
+    }
+    if (e['config-function-proxy-hook']){
+      info += 'F'
+    }
+    if (e['config-iframe-proxy-hook']){
+      info += 'I'
     }
     chrome.browserAction.setBadgeText({text: info});
   })

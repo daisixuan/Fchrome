@@ -44,7 +44,9 @@ dtavm.proxy_start = function proxy_start() {
                     let result = Reflect.apply(target, thisArg, argArray)
                     if (target.name !== "toString"){
                         if (WatchName === "window.console"){
-                        }else if(result instanceof Promise){
+                        }
+                        else if(!target.name){}
+                        else if(result instanceof Promise){
                             result.then((data)=>{
                                 dtavm.log(`[${WatchName}] apply function name is [${target.name}], argArray is `, argArray,`result is `, data);
                             })
@@ -123,6 +125,11 @@ dtavm.proxy_start = function proxy_start() {
                     dtavm.log(`[${WatchName}] setPrototypeOf proto is [`,proto,`]`)
                     return Reflect.setPrototypeOf(target, proto);
                 },
+                ownKeys(target) {
+                    var result = Reflect.ownKeys(target)
+                    dtavm.log(`[${WatchName}] invoke ownkeys; result is `, result)
+                    return result
+                },
                 // preventExtensions(target) {
                 //     dtavm.log(`[${WatchName}] preventExtensions`)
                 //     return Reflect.preventExtensions(target);
@@ -142,13 +149,29 @@ dtavm.proxy_start = function proxy_start() {
         return new Proxy(obj, getObjhandler(objname));
     }
 
-
+    globalThis = dtavm.proxy(window_jyl, "globalThis")
     Object.defineProperties(globalThis, {
         'window': {
             configurable: false,
             enumerable: true,
             get: function get() {
                 return dtavm.proxy(window_jyl, "window")
+            },
+            set: undefined
+        },
+        'self': {
+            configurable: false,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(window_jyl, "self")
+            },
+            set: undefined
+        },
+        'this': {
+            configurable: false,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(window_jyl, "this")
             },
             set: undefined
         },
@@ -249,4 +272,16 @@ dtavm.iframe_proxy_start = function iframe_proxy_start() {
         }
         
     }, undefined)
+}
+dtavm.function_proxy = function function_proxy(){
+    let filter_func_list = ["Function", "eval", "Object", "Array", "Number", "parseFloat", "parseInt", "Boolean", "String", "Symbol", "Date", "Promise", "RegExp", "Error", "AggregateError", "EvalError", "RangeError", "ReferenceError", "SyntaxError", "TypeError", "URIError", "ArrayBuffer", "Uint8Array", "Int8Array", "Uint16Array", "Int16Array", "Uint32Array", "Int32Array", "Float32Array", "Float64Array", "Uint8ClampedArray", "BigUint64Array", "BigInt64Array", "DataView", "Map", "BigInt", "Set", "WeakMap", "WeakSet", "Proxy", "FinalizationRegistry", "WeakRef", "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent", "escape", "unescape", "isFinite", "isNaN", "SharedArrayBuffer", "VMError", "Buffer"];
+    const globalFunctions = Reflect.ownKeys(globalThis).filter((key) => {
+        var result = globalThis[key];
+        if (typeof result === 'function' && !filter_func_list.includes(key)) {
+            // eval(`key = globalThis.${key}`);
+            eval(`${key}=window.${key}`)
+            return result;
+        }
+    });
+        
 }
