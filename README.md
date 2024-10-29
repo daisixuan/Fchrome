@@ -32,17 +32,25 @@
                     - 然后在软件中或者命令行下即可打开浏览器
     - ## 浏览器环境自吐模块
         - ### 实现功能(后续会增加更多的对象监控)
+        - #### 对象监控
         ```
-        window 对象监控
-        navigator 对象监控
-        document 对象监控
-        location 对象监控
-        history 对象监控
-        screen 对象监控
-        localStorage 对象监控
-        sessionStorage 对象监控
-        performance 对象监控
+        window
+        self
+        top
+        parent
+        navigator
+        document
+        location
+        history
+        screen
+        localStorage
+        sessionStorage
+        performance
+        indexedDB
+        crypto
         ```
+        - #### 全局函数监控(实验中)
+          ![screenshot](imgs/function2.png)
         - ### 原理简介
             - 对chromium源码中全局对象定义进行修改/添加，使得全局对象变得可以覆盖，从而使用JS的代理器对全局对象进行监控
             - 对debugger关键字替换为debuggee 无视无限debugger

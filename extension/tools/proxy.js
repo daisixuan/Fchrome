@@ -160,12 +160,52 @@ dtavm.proxy_start = function proxy_start() {
             set: undefined
         },
         'self': {
-            configurable: false,
+            configurable: true,
             enumerable: true,
             get: function get() {
                 return dtavm.proxy(window_jyl, "self")
             },
+            set: function set(){
+                debuggee;
+            }
+        },
+        'top': {
+            configurable: false,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(window_jyl, "top")
+            },
             set: undefined
+        },
+        'parent': {
+            configurable: true,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(window_jyl, "parent")
+            },
+            set: function set(){
+                debuggee;
+            }
+        },
+        'screen': {
+            configurable: true,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(screen_jyl, "screen")
+            },
+            set: function set(){
+                debuggee;
+            }
+        },
+        'performance': {
+            configurable: true,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(performance_jyl, "performance")
+            },
+            set: function set(){
+                debuggee;
+            }
         },
         'document': {
             configurable: false,
@@ -213,12 +253,27 @@ dtavm.proxy_start = function proxy_start() {
             get: function get() {
                 return dtavm.proxy(location_jyl, "location")
             },
+            set: function set(){
+                debuggee;
+            }
+        },
+        'indexedDB': {
+            configurable: true,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(indexedDB_jyl, "indexedDB")
+            },
+            set: undefined
+        },
+        'crypto': {
+            configurable: true,
+            enumerable: true,
+            get: function get() {
+                return dtavm.proxy(crypto_jyl, "crypto")
+            },
             set: undefined
         },
     })
-
-    screen = dtavm.proxy(screen_jyl, "screen")
-    performance = dtavm.proxy(performance_jyl, "performance")
 }
 dtavm.iframe_proxy_start = function iframe_proxy_start() {
     function defineProperty(obj, key, value, configurable, enumerable, writable, getter, setter) {
